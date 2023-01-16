@@ -13,6 +13,14 @@ public class Grid{
 		grid = new int[gridSize];
     }
 	
+	public void printGrid() {
+		for(int i = 0; i < gridLength; i++) {
+			for(int j = i*gridLength; j < (i+1)*gridLength; j++) {
+				System.out.print(grid[j] + " ");
+			}
+			System.out.println();
+		}
+	}
 	public int getGridSize() {
 		return gridSize;
 	}
@@ -30,13 +38,15 @@ public class Grid{
 	}
 
 	public boolean gridOccupied(int x) {
-		  if(x<0 || grid[x] == 1) {
+		  if(x<0 || x >= 100) {
+			  return true;
+		  }
+		  if(grid[x] == 1){
 			  return true;
 		  }else {
 			  return false;
 		  }
 	 }
-	
 	
 		
 	public void setGrid(String place, int num) {
