@@ -5,22 +5,70 @@ import java.util.ArrayList;
 public class Grid{
 	protected int gridLength = 10;
 	protected int gridSize = 100;
-	protected int []grid;
+	protected String []grid;
 	public int comCount = 0;
 	private GameHelper helper = new GameHelper();
 
 	public Grid(){
-		grid = new int[gridSize];
-    }
-	
+		grid = new String[gridSize];
+    clearGrid();
+  }
+  
 	public void printGrid() {
+    System.out.println("v - Vazio, e - Errou, a - Acertou, d - DotCom");
+    System.out.println("- A B C D E F G H I J");
 		for(int i = 0; i < gridLength; i++) {
+      System.out.print(i + " ");
 			for(int j = i*gridLength; j < (i+1)*gridLength; j++) {
 				System.out.print(grid[j] + " ");
 			}
 			System.out.println();
 		}
 	}
+
+  public void printGridEscondida() {
+    System.out.println("v - Vazio, e - Errou, a - Acertou");
+		for(int i = 0; i < gridLength; i++) {
+			for(int j = i*gridLength; j < (i+1)*gridLength; j++) {
+        if(grid[j] == "d"){
+          System.out.print("v ");
+        }else{
+          System.out.print(grid[j] + " ");
+        }
+			}
+			System.out.println();
+		}
+	}
+
+  public ArrayList<String> movePositions(ArrayList<String> locationCells, int space, int move) {
+  		String s;
+  		int temp;
+  		if(move == 3 & !gridOccupied(helper.convertAlphatoNuber(locationCells.get(0)) - space)) {
+  			for(int i = 0; i < locationCells.size(); i++){
+  				s = locationCells.get(0);
+  				temp = helper.convertAlphatoNuber(s) - space;
+  				setGrid(temp, "d");
+  				locationCells.add(helper.convertNumberToAlpha(temp));
+  				setGrid(s,"v");
+  				locationCells.remove(s);
+  			}
+  			System.out.println("A DotCom moveu para frente");
+  		}else if (move == 2 & !gridOccupied(helper.convertAlphatoNuber(locationCells.get(locationCells.size()-1)) + space)) {
+  			for(int i = 0; i < locationCells.size(); i++){
+  				s = locationCells.get(0);
+  				temp = helper.convertAlphatoNuber(s) + space;
+  				setGrid(temp, "d");
+  				locationCells.add(helper.convertNumberToAlpha(temp));
+  				setGrid(s,"v");
+  				locationCells.remove(s);
+  			}
+  			System.out.println("A DotCom moveu para tras");
+  		}else {
+  			System.out.println("A DotCom nao se moveu");
+  		}
+  		return locationCells;
+  	}
+  
 	public int getGridSize() {
 		return gridSize;
 	}
@@ -28,7 +76,7 @@ public class Grid{
 	public int getGridLength() {
 		return gridLength;
 	}
-
+  
 	public void setGridLength(int gridLength) {
 		this.gridLength = gridLength;
 	}
@@ -41,7 +89,7 @@ public class Grid{
 		  if(x<0 || x >= 100) {
 			  return true;
 		  }
-		  if(grid[x] == 1){
+		  if(grid[x] == "d"){
 			  return true;
 		  }else {
 			  return false;
@@ -49,69 +97,23 @@ public class Grid{
 	 }
 	
 		
-	public void setGrid(String place, int num) {
-		int number = helper.convertAlphatoNuber(place);
-		grid[number] = num;
+	public void setGrid(String local, String escrita) {
+		int number = helper.convertAlphatoNuber(local);
+		grid[number] = escrita;
 	}
 	
-	public void setGrid(int place, int num) {
-		grid[place] = num;
+	public void setGrid(int local, String escrita) {
+		grid[local] = escrita;
 	}
 	
-	public int getGrid(int number) {
+	public String getGrid(int number) {
 		return grid[number];
 	}
 	
 	public void clearGrid() {
 		for(int i = 0; i < gridSize; i++) {
-			grid[i] = 0;
+			grid[i] = "v";
 		}
 	}
-	
-	public ArrayList<String> createDotCom(int comSize) {
-		  ArrayList<String> alphaCells = new ArrayList<String>();                                 
-		  int [] coords = new int[comSize];                  
-		  int attempts = 0;                                 
-		  boolean success = false;                          
-		  int location = 0;                               
-		    
-		  //se a com for impar ela fica na vertical, se for par na horizontal
-		  comCount++;                                       
-		  int incr = 1;                                     
-		  if ((comCount % 2) == 1) {                   
-		    incr = gridLength;                              
-		  }
-		    
-		  //tentar as posicoes ate arumar uma posicao sem problemas para a dotcom
-		  while (!success & attempts++ < 100 ) {          
-		  location = (int) (Math.random() * gridSize);
-			int x = 0;                                      
-		        success = true;                  
-		        while (success && x < comSize) {       
-		          if (grid[location] == 0) {                  
-		             coords[x++] = location;               
-		             location += incr;                   
-		             if (location >= gridSize){ //passou da grid            
-		               success = false;                
-		             }
-		             if (x>0 & (location % gridLength == 0)) { //passou da grid
-		               success = false;                       
-		             }
-		          } else {//grid ocupada
-		              success = false;                      
-		          }
-		        }
-		    }                                            
-		
-		    //converter de vetor para alpha (de "12" para "a2")
-		    int x = 0;
-		    while (x < comSize) {
-		      grid[coords[x]] = 1;
-		      alphaCells.add(helper.convertNumberToAlpha(coords[x]));
-		      x++; 
-		    }
-		    
-		    return alphaCells;
-	  }
 	
 }

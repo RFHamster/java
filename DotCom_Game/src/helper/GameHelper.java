@@ -1,4 +1,5 @@
 package helper;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -27,18 +28,21 @@ public class GameHelper{
 		  int row = 0;
 		  int column = 0;
 		  row = (int) (number / gridLength);        
-	      column = number % gridLength;            
-	      String temp = String.valueOf(alphabet.charAt(column));   
-	      return temp.concat(Integer.toString(row));
+	    column = number % gridLength;            
+	    String aux = String.valueOf(alphabet.charAt(column));   
+	    return aux.concat(Integer.toString(row));
 	  }
 	  
 	  public int convertAlphatoNuber(String s) {
-			String primeiro = ""+s.charAt(1);
-			String segundo = ""+s.charAt(0);
-			int seg;
-			seg = letras.indexOf(segundo);
-			int pri = Integer.parseInt(primeiro) * 10;
-			return seg + pri;
+      if(s == null || s.length() != 2){
+        return -1;
+      }
+			 String primeiro = ""+s.charAt(1);
+  		String segundo = ""+s.charAt(0);
+  		int seg;
+  		seg = letras.indexOf(segundo);
+  		int pri = Integer.parseInt(primeiro) * 10;
+  		return seg + pri;
 		}
 	
   public String getUserInput(String prompt) {

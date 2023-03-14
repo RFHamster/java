@@ -31,20 +31,21 @@ public abstract class Player {
 		this.grid = grid;
 	}
 
-	public abstract String takeTurn();
+  public abstract String Guess();
 
-	public String sufferTurn(String guess) {
-		grid.setGrid(guess, 2);
+	public String takeTurn(String guess) {
+		grid.setGrid(guess, "e");
 		String result = "miss";
 	      DotCom hitted = null;
 	      for(DotCom dotcom : dotcoms) {
-	        result = dotcom.checkYourself(guess, grid);   
+	        result = dotcom.checkYourself(guess);   
 	        if (result != "miss") {
 	          hitted = dotcom;
-	          grid.setGrid(guess, 3);
+	          grid.setGrid(guess, "a");
 	          if(result == "hit") {
 	        	  if(hitted instanceof BigCom) {
-	        		  System.out.println(dotcom.hitMessage(grid));
+	        		  int random = (int)(Math.random() * 4);
+	        		  dotcom.setLocationCells(grid.movePositions(dotcom.getLocationCells(), ((BigCom) dotcom).distancia, random));
 	        	  }else {
 	        		  System.out.println(dotcom.hitMessage()); 
 	        	  }	
@@ -63,7 +64,7 @@ public abstract class Player {
 	      }
 	      return result;
 	}
-	
+  
 	public boolean placeDotCom(DotCom dotcom) {
 		dotcoms.add(dotcom);
 		return true;

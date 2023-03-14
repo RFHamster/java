@@ -10,47 +10,40 @@ import DotCom.StartupCom;
 
 public class ComputerPlayer extends Player{
 	private ArrayList<String> jogadas;
-	private int index;
+	private int index;	
 	
-	@Override
-	public String takeTurn() {
-		int indexGuess = (int) (Math.random() * index);
-		String guess = jogadas.get(indexGuess);
-		return guess;
-	}
-	
-	private void buildCom(String name, int size) {
+	private void novaDot(String name, int size) {
 	    DotCom dotcom = null;
-	    ArrayList<String> l;
+	    ArrayList<String> colinha;
 	    if(size == 3) {
-	    	dotcom = new StartupCom();
-	    	l = grid.createDotCom(size);
-	    	dotcom.setName(name);
-	        dotcom.setLocationCells(l);
-	    	System.out.print(l);
+	    	dotcom = new StartupCom(name);
+	    	colinha = createDotCom(size);
+	      dotcom.setLocationCells(colinha);
+	    	System.out.print(colinha);
 	    }else if(size == 4) {
-	    	dotcom = new MicroCom();
-	    	l = grid.createDotCom(size);
-	    	dotcom.setName(name);
-	        dotcom.setLocationCells(l);
-	    	System.out.print(l);
+	    	dotcom = new MicroCom(name);
+	    	colinha = createDotCom(size);
+	      dotcom.setLocationCells(colinha);
+	    	System.out.print(colinha);
 	    }else if (size == 5) {
-	    	dotcom = new JustAnotherDotCom();
-	    	dotcom.setName(name);
-	    	l = grid.createDotCom(size);
-	    	dotcom.setLocationCells(l);
-	    	System.out.print(l);
+	    	dotcom = new JustAnotherDotCom(name);
+	    	colinha = createDotCom(size);
+	    	dotcom.setLocationCells(colinha);
+	    	System.out.print(colinha);
 	    }else if (size == 6) {
-	    	dotcom = new BigCom();
-	    	dotcom.setName(name);
-	    	l = grid.createDotCom(size);
-	    	dotcom.setLocationCells(l);
+	    	dotcom = new BigCom(name);
+	    	colinha = createDotCom(size);
+	    	dotcom.setLocationCells(colinha);
 	    	((BigCom) dotcom).setup();
-	    	System.out.print(l);
+	    	System.out.print(colinha);
 	    }
-	    dotcoms.add(dotcom);
+	    placeDotCom(dotcom);
 	  }
-	
+  
+	public String Guess() {
+		String jogada = jogadas.get((int) (Math.random() * index));
+		return jogada;
+	}
 	public ArrayList<String> createDotCom(int comSize) {
 		  ArrayList<String> alphaCells = new ArrayList<String>();
 		  int [] coords = new int[comSize];
@@ -58,38 +51,35 @@ public class ComputerPlayer extends Player{
 		  boolean success = false;
 		  int location = 0;                               
 		    
-		  //se a com for impar ela fica na vertical, se for par na horizontal
 		  grid.comCount++;                                       
 		  int incr = 1;                                     
 		  if ((grid.comCount % 2) == 1) {                   
 		    incr = grid.getGridLength();                              
 		  }
 		    
-		  //tentar as posicoes ate arumar uma posicao sem problemas para a dotcom
 		  while (!success & attempts++ < 100 ) {
 		  location = (int) (Math.random() * grid.getGridSize());
 			int x = 0;                                      
 		        success = true;                  
 		        while (success && x < comSize) {       
-		          if (grid.getGrid(location) == 0) {                  
+		          if (grid.getGrid(location) == "v") {                  
 		             coords[x++] = location;               
 		             location += incr;                   
-		             if (location >= grid.getGridSize()){ //passou da grid            
+		             if (location >= grid.getGridSize()){          
 		               success = false;                
 		             }
-		             if (x>0 & (location % grid.getGridLength() == 0)) { //passou da grid
+		             if (x>0 & (location % grid.getGridLength() == 0)) {
 		               success = false;                       
 		             }
-		          } else {//grid ocupada
+		          } else {
 		              success = false;                      
 		          }
 		        }
 		    }                                            
-
-		    //converter de vetor para alpha (de "12" para "a2")
+    
 		    int x = 0;
 		    while (x < comSize) {
-		      grid.setGrid(coords[x], 1);
+		      grid.setGrid(coords[x], "d");
 		      alphaCells.add(helper.convertNumberToAlpha(coords[x]));
 		      x++; 
 		    }
@@ -102,20 +92,20 @@ public class ComputerPlayer extends Player{
 		dotcoms = new ArrayList<DotCom>();
 		this.name = name;
 		this.jogadas = new ArrayList<String>();
-		for(int i = 0; i < grid.getGridSize(); i++) {
+    novaDot("StartupCom1", 3);
+    novaDot("StartupCom2", 3);
+    novaDot("StartupCom3", 3);
+  	novaDot("StartupCom4", 3);
+  	novaDot("MicroCom1", 4);
+  	novaDot("MicroCom2", 4);
+   	novaDot("MicroCom3", 4);
+   	novaDot("JustAnotherDotCom1", 5);
+   	novaDot("JustAnotherDotCom2", 5); 
+    novaDot("BigCom1", 6);
+    for(int i = 0; i < grid.getGridSize(); i++) {
 			jogadas.add(helper.convertNumberToAlpha(i));
 		}
-		index = grid.gridSize;
-    	buildCom("BigCom1", 6);
-    	buildCom("StartupCom1", 3);
-    	buildCom("StartupCom2", 3);
-    	buildCom("StartupCom3", 3);
-    	buildCom("StartupCom4", 3);
-    	buildCom("MicroCom1", 4);
-    	buildCom("MicroCom2", 4);
-    	buildCom("MicroCom3", 4);
-    	buildCom("JustAnotherDotCom1", 5);
-    	buildCom("JustAnotherDotCom2", 5); 
+    index = grid.gridSize;
 	}
 
 	

@@ -1,7 +1,12 @@
 package DotCom;
 
 public class StartupCom extends DotCom{
+
+  public StartupCom(String name){
+    this.name = name;
+  }
+  
 	public String hitMessage() {
-		return "Voce Acertou a " + name;
+		return "A " + name + " foi acertada";
 	}
 }

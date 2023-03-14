@@ -1,43 +1,14 @@
 package DotCom;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import helper.Grid;
 
 abstract public class DotCom {
 	
 	protected ArrayList<String> locationCells;
 	protected String name;
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public List<String> getLocationCells() {
-		return locationCells;
-	}
-	
-	public void setLocationCells(ArrayList<String> cells) {
-		this.locationCells = cells; 
-	}
-	
-	public abstract String hitMessage();
-	public String hitMessage(Grid grid) {
-		return "n";
-	}
-	
-	public String killMessage() {
-		return "Voce Matou a " + name;
-	}
-	
-	public String checkYourself(String guess, Grid grid) {
+
+  public String checkYourself(String guess) {
 		 String result = "miss";
-		 grid.setGrid(guess, 2);
 		 for(String p : locationCells) {
 		   if (p.equals(guess)) {
 		     result = "hit";
@@ -51,5 +22,27 @@ abstract public class DotCom {
 		   result = "kill";
 		 }
 		 return result;	
+	}
+  
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	public ArrayList<String> getLocationCells() {
+		return locationCells;
+	}
+	
+	public void setLocationCells(ArrayList<String> cells) {
+		this.locationCells = cells; 
+	}
+	
+	public abstract String hitMessage();
+	
+	public String killMessage() {
+		return "A " + name + " morreu";
 	}
 }
